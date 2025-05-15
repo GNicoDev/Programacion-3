@@ -10,7 +10,8 @@ public class Main {
         System.out.println();
         System.out.println("El numero binario de 26 es: " + binaryNumber(26));
         System.out.println();
-        System.out.println("Los primero 8 numeros de la secuencia fibonaci son: " + fibonacciSecuence(8));
+        int n = 10;
+        System.out.println("Los primeros" + n + " numeros de la secuencia fibonaci son: " + fibonacciSequence(n,0,1));
     }
 
 
@@ -82,9 +83,10 @@ Fibonacci.
 Por ej. los 6 primeros términos son: 0 1 1 2 3 5
 
     * */
-    private static String fibonacciSecuence(int number) {
-
-        if(number)
+    private static String fibonacciSequence(int n, int actual, int previous) {
+        if (n == 0)
+            return "";
+        return actual + " " + fibonacciSequence(n-1,actual+previous, actual);
     }
 
 
