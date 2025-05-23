@@ -163,4 +163,25 @@ public class GrafoDirigido<T> implements Grafo<T> {
 		}
 	}
 
+	public List<Integer> BFS(int verticeId) {
+		Set<Integer> visitados = new HashSet<>();
+		List<Integer> resultado = new ArrayList<>();
+
+		DfsRecursivo(verticeId,visitados,resultado);
+		return resultado;
+	}
+
+	private void DfsRecursivo(int origen, Set<Integer> visitados, List<Integer> resultado) {
+			visitados.add(origen);
+			resultado.add(origen);
+
+			Iterator<Integer> it = this.obtenerVertices();
+			while (it.hasNext()) {
+				int vertice = it.next();
+				if (!visitados.contains(vertice)) {
+					DfsRecursivo(vertice,visitados,resultado);
+				}
+			}
+	}
+
 }
