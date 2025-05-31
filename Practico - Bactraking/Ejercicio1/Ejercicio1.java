@@ -32,7 +32,7 @@ public class Ejercicio1 {
                 }
             }
         }
-
+        caminoActual.removeLast();
     }
 
     private boolean esSolucion(List<Integer> caminoActual, int destino) {
