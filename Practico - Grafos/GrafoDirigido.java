@@ -163,25 +163,90 @@ public class GrafoDirigido<T> implements Grafo<T> {
 		}
 	}
 
-	public List<Integer> BFS(int verticeId) {
-		Set<Integer> visitados = new HashSet<>();
-		List<Integer> resultado = new ArrayList<>();
+	public List<Integer> DFS() {
+		List<Integer> visitados = new ArrayList<>();
+	//	List<Integer> resultado = new ArrayList<>();
 
-		DfsRecursivo(verticeId,visitados,resultado);
-		return resultado;
+		for (Integer vertice : adjList.keySet()) { // Evita problemas de iteración
+			if (!visitados.contains(vertice)) {
+				DfsRecursivo(vertice,visitados);
+			}
+		}
+		return visitados;
 	}
 
-	private void DfsRecursivo(int origen, Set<Integer> visitados, List<Integer> resultado) {
-			visitados.add(origen);
-			resultado.add(origen);
+	private void DfsRecursivo(Integer origen, List<Integer> visitados) {
+		visitados.add(origen);
 
-			Iterator<Integer> it = this.obtenerVertices();
-			while (it.hasNext()) {
-				int vertice = it.next();
-				if (!visitados.contains(vertice)) {
-					DfsRecursivo(vertice,visitados,resultado);
+		for (Arco<T> arco : adjList.get(origen)) {
+			Integer verticeDestino = arco.getVerticeDestino();
+			if (!visitados.contains(verticeDestino)) {
+				DfsRecursivo(verticeDestino, visitados);
+			}
+		}
+	}
+
+	public boolean DFSesCiclico() {
+		List<Integer> visitados = new ArrayList<>();
+		List<Integer> enProceso = new ArrayList<>();
+		for (Integer vertice : adjList.keySet()) {
+			if (!visitados.contains(vertice)) {
+				if(DFSrecursivoCiclico(vertice, visitados, enProceso))
+					return true;
+			}
+		}
+		return false;
+	}
+
+	private boolean DFSrecursivoCiclico(Integer vertice, List<Integer> visitados, List<Integer> enProceso) {
+		enProceso.add(vertice);
+		visitados.add(vertice);
+
+		for (Arco<T> arco : adjList.get(vertice)) {
+			Integer verticeDestino = arco.getVerticeDestino();
+			if (enProceso.contains(verticeDestino)) {
+				return true;
+			}
+			if (!visitados.contains(verticeDestino)) {
+				if (DFSrecursivoCiclico(verticeDestino, visitados, enProceso)) {
+					return true; // Propaga el ciclo
 				}
 			}
+		}
+		enProceso.remove(vertice); // Removemos solo cuando terminamos su exploración
+		return false;
 	}
+
+// metodo de recorrido de grafo iterativo (no recursivo). Este metodo recorre el grafo por
+// niveles (imaginando un grafo como arbol).
+
+	public List<Integer> BFS() {
+		List<Integer> visitados = new ArrayList<>();
+		Queue<Integer> fila = new LinkedList<>();
+
+		for (Integer vertice : adjList.keySet()) {
+			if (!visitados.contains(vertice)) {
+				Bfs(vertice, fila, visitados);
+			}
+		}
+		return visitados;
+	}
+
+	private void Bfs(Integer vertice, Queue<Integer> fila, List<Integer> visitados) {
+		fila.add(vertice);
+		visitados.add(vertice);
+
+		while (!fila.isEmpty()) {
+			Integer x = fila.poll();
+			for (Arco<T> arco : adjList.get(x)) {
+				Integer verticeDestino = arco.getVerticeDestino();
+				if (!visitados.contains(verticeDestino)) {
+					visitados.add(verticeDestino);
+					fila.add(verticeDestino);
+				}
+			}
+		}
+	}
+
 
 }
