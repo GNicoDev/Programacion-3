@@ -1,0 +1,17 @@
+Generalmente los algoritmos tienen un planteo recursivocon
+La siguiente estructura básica
+
+*
+*  Backtraking (estado e)
+ {
+    Condición de Corte:
+        ¿e es una posible solución?
+        SI:
+              operar con la solución
+              Ej.: fijarse si es la mejor hasta el momento, o
+                   agregarla a una lista de soluciones, o
+                   imprimir, etc ,etc
+        NO:
+               Para cada hijo c del estado actual e:
+                        Backtraking(c) /// EXPLORAR recursivamente a partir de c
+ }
