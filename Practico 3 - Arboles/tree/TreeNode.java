@@ -1,5 +1,7 @@
-public class TreeNode {
-    public Integer data;
+package tree;
+
+public class TreeNode<T> {
+    public T data;
     public TreeNode left;
     public TreeNode right;
 
@@ -9,11 +11,11 @@ public class TreeNode {
         this.right = null;
     }
 
-    public int getData() {
+    public Integer getData() {
         return data;
     }
 
-    public void setData(int data) {
+    public void setData(T data) {
         this.data = data;
     }
 

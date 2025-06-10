@@ -1,3 +1,5 @@
+package tree;
+
 import java.util.List;
 
 public class Tree {
@@ -64,61 +66,52 @@ public class Tree {
             add(root,value);
      }
 
-     public boolean delete(Integer value) {
-         if (root == null)
-             return false;
+     /// //////////////////////////////////////////////////////////
+    public boolean delete(Integer value) {
+        if (value == null) return false;
+        if (!contains(root, value)) return false;
 
-             TreeNode foundNode = findElem(root, value);
-             if (foundNode == null) {
-                 return false;
-             }
-             //Case Leaf node
-             if (isLeaf(foundNode)) {
-                 if (foundNode == root) {
-                     root = null;
-                     return true;
-                 }
-                 TreeNode father = searchFather(root, foundNode);
-                 removeNode(father,foundNode);
-                 return true;
-             }
+        root = recursiveRemove(root, value);
+        return true;
+    }
 
-             TreeNode nodeToRemove = searchNodeRML(foundNode);
-             foundNode.setData(nodeToRemove.getData());
-             removeNode(searchFather(foundNode, nodeToRemove),nodeToRemove);
-             return true;
-     }
 
-    private void removeNode(TreeNode father, TreeNode nodeToRemove) {
-        if (father.getLeft() == nodeToRemove){
-            father.setLeft(null);
+    private TreeNode recursiveRemove(TreeNode actual, Integer valor) {
+        if (actual == null) return null;
+
+        if (valor < actual.getData()) {
+            actual.left = recursiveRemove(actual.left, valor);
+        } else if (valor > actual.getData()) {
+            actual.right = recursiveRemove(actual.right, valor);
+        } else {
+            // Nodo con un solo hijo o sin hijos
+            if (actual.left == null) return actual.right;
+            if (actual.right == null) return actual.left;
+
+            // Nodo con dos hijos: buscar el sucesor in-order (menor del subárbol derecho)
+            TreeNode sucesor = findMin(actual.right);
+            actual.setData(sucesor.getData());
+            actual.right = recursiveRemove(actual.right, sucesor.getData());
         }
-        father.setRight(null);
+        return actual;
     }
 
-    private TreeNode searchFather(TreeNode root, TreeNode nodefound) {
-        if (root.getLeft()==nodefound || root.getRight()==nodefound){
-            return root;
+    private TreeNode findMin(TreeNode nodo) {
+        while (nodo.left != null) {
+            nodo = nodo.left;
         }
-        if (nodefound.getData()<root.getData())
-            return searchFather(root.getLeft(),nodefound);
-        else
-            return searchFather(root.getRight(),nodefound);
-
+        return nodo;
     }
 
-    private boolean isLeaf(TreeNode node) {
-        return node.getLeft()==null && node.getRight()==null;
+    private boolean contains(TreeNode actual, Integer valor) {
+        if (actual == null) return false;
+        if (valor.equals(actual.getData())) return true;
+        return valor < actual.getData()
+                ? contains(actual.left, valor)
+                : contains(actual.right, valor);
     }
 
-
-    private TreeNode searchNodeRML(TreeNode node) {
-        if (node.getLeft() == null)
-            return node;
-        else
-           return searchNodeRML(node.getLeft());
-    }
-
+/// /////////////////////////////////////////////////////////////////////////
     public int getHeight() {
         return calculatorHeight(root);
      }
@@ -200,4 +193,18 @@ public class Tree {
         else
             return maxElem(node.getRight());
     }
+
+
+    /// //////////////////////////////////////////////////////////////////
+    /// Metodo de incesrion manual para chequear ejercicio
+    public void insertManual(TreeNode<Character> padre, char dato, boolean esIzquierdo) {
+        if (padre == null) return;
+
+        if (esIzquierdo) {
+            padre.left = new TreeNode(dato);
+        } else {
+            padre.right = new TreeNode(dato);
+        }
+    }
+
 }
